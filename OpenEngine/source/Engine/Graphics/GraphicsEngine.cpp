@@ -104,7 +104,7 @@ void GraphicsEngine::Draw()
 {
 	ClearGraphics();
 
-	HandleWireframeMode(true);
+	HandleWireframeMode(false);
 
 	//render between these two functions
 	for (VAOPtr VAO : VAOs) {

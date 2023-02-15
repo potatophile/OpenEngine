@@ -5,8 +5,8 @@ VertexArrayObject::VertexArrayObject()
 {
 	ID = EAB = VAB = 0;
 
-	Shape.PositionMatrix = PolyPositions;
-	Shape.IndicesMatrix = PolyIndices;
+	Shape.PositionMatrix = CirclePositions;
+	Shape.IndicesMatrix = CircleIndices;
 
 	//create the ID for our VAO
 	glGenVertexArrays(1, &ID);
