@@ -45,8 +45,14 @@ void Game::Start(const char* WTitle, bool bFullscreen, int WWidth, int WHeight)
 void Game::Run()
 {
     if (!bIsGameOver) {
+        //create a shader
+        Graphics->CreateShader({
+            L"Game/Shader/SimpleShader/SimpleShader.svert",
+            L"Game/Shader/SimpleShader/SimpleShader.sfrag"
+            });
         //create a triangle
-        Graphics->CreateVAO();
+        Graphics->CreateVAO(GeometricShapes::Polygon);
+        Graphics->CreateVAO(GeometricShapes::Triangle);
     }
 
     //as long as the game is not over
