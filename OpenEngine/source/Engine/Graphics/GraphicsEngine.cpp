@@ -105,7 +105,7 @@ void GraphicsEngine::Draw()
 {
 	ClearGraphics();
 
-	HandleWireframeMode(false);
+	HandleWireframeMode(false);			//wireframe mode off when false
 
 	UNint index = 0;
 

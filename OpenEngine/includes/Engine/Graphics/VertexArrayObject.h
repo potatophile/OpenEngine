@@ -14,7 +14,7 @@ const IndicesMatrix TriangleIndices{
 };
 
 const PositionMatrix PolyPositions{
-	//x		//y		//z		//Colour
+	//x		//y		//z		//Colour - Yellow
 	-0.5f,	-0.5f,	0.0f,	1.0f, 1.0f, 0.0f,	//bottom left
 	 0.5f,	-0.5f,	0.0f,	1.0f, 1.0f, 0.0f,	//bottom right
 	 0.5f,	 0.5f,	0.0f,	1.0f, 1.0f, 0.0f,	//top right
@@ -28,9 +28,11 @@ const IndicesMatrix PolyIndices{
 
 const PositionMatrix CirclePositions{
 	//x		//y		//z
-	 0.0f,   0.0f,  0.0f,	1.0f, 1.0f, 1.0f,		//center
-	-0.5f,	 0.0f,	0.0f,	1.0f, 1.0f, 0.0f,		//left
-	 //top-left quadrant										//colour
+	 0.0f,   0.0f,  0.0f,	1.0f, 1.0f, 1.0f,		//center, color -White
+	-0.5f,	 0.0f,	0.0f,	1.0f, 1.0f, 0.0f,		//left, color - yellow
+
+	 //calculating x using pythagoras theorem (h^2 = p^2 + b^2)
+	 //top-left quadrant									//colour - Red
 	-sqrt((0.5f * 0.5f) - (0.1f * 0.1f)),	0.1f,	0.0f,	1.0f, 0.0f, 0.0f,
 	-sqrt((0.5f * 0.5f) - (0.15f * 0.15f)), 0.15f,	0.0f,	1.0f, 0.0f, 0.0f,
 	-sqrt((0.5f * 0.5f) - (0.2f * 0.2f)),	0.2f,	0.0f,	1.0f, 0.0f, 0.0f,
@@ -41,7 +43,9 @@ const PositionMatrix CirclePositions{
 	-sqrt((0.5f * 0.5f) - (0.47f * 0.47f)), 0.47f,	0.0f,	1.0f, 0.0f, 0.0f,
 	-sqrt((0.5f * 0.5f) - (0.49f * 0.49f)), 0.49f,	0.0f,	1.0f, 0.0f, 0.0f,
 	 0.0f,	 0.5f,	0.0f,	1.0f, 0.0f, 0.0f,		//top center
-	 //top-right quadrant
+
+	 //top-right quadrant									//colour - Green
+	 //calculating y using pythagoras theorem (h^2 = p^2 + b^2)
 	 0.1f,	 sqrt((0.5f * 0.5f) - (0.1f * 0.1f)),	0.0f,	0.0f, 1.0f, 0.0f,
 	 0.15f,	 sqrt((0.5f * 0.5f) - (0.15f * 0.15f)),	0.0f,	0.0f, 1.0f, 0.0f,
 	 0.2f,	 sqrt((0.5f * 0.5f) - (0.2f * 0.2f)),	0.0f,	0.0f, 1.0f, 0.0f,
@@ -52,7 +56,8 @@ const PositionMatrix CirclePositions{
 	 0.47f,	 sqrt((0.5f * 0.5f) - (0.47f * 0.47f)),	0.0f,	0.0f, 1.0f, 0.0f,
 	 0.49f,	 sqrt((0.5f * 0.5f) - (0.49f * 0.49f)),	0.0f,	0.0f, 1.0f, 0.0f,
 	 0.5f,	 0.0f,	0.0f,	0.0f, 1.0f, 0.0f,		//right
-	 //bottom-right quadrant
+
+	 //bottom-right quadrant								//colour - Blue
 	 0.49f,	-sqrt((0.5f * 0.5f) - (0.49f * 0.49f)),	0.0f,	0.0f, 0.0f, 1.0f,
 	 0.47f,	-sqrt((0.5f * 0.5f) - (0.47f * 0.47f)),	0.0f,	0.0f, 0.0f, 1.0f,
 	 0.44f,	-sqrt((0.5f * 0.5f) - (0.44f * 0.44f)),	0.0f,	0.0f, 0.0f, 1.0f,
@@ -63,7 +68,8 @@ const PositionMatrix CirclePositions{
 	 0.15f,	-sqrt((0.5f * 0.5f) - (0.15f * 0.15f)),	0.0f,	0.0f, 0.0f, 1.0f,
 	 0.1f,	-sqrt((0.5f * 0.5f) - (0.1f * 0.1f)),	0.0f,	0.0f, 0.0f, 1.0f,
 	 0.0f,	-0.5f,	0.0f,	0.0f, 0.0f, 1.0f,		//bottom center
-	 //bottom-left quadrant
+
+	 //bottom-left quadrant									//colour - Yellow
 	-0.1f,	-sqrt((0.5f * 0.5f) - (0.1f * 0.1f)),	0.0f,	1.0f, 1.0f, 0.0f,
 	-0.15f,	-sqrt((0.5f * 0.5f) - (0.15f * 0.15f)),	0.0f,	1.0f, 1.0f, 0.0f,
 	-0.2f,	-sqrt((0.5f * 0.5f) - (0.2f * 0.2f)),	0.0f,	1.0f, 1.0f, 0.0f,
@@ -121,7 +127,7 @@ const IndicesMatrix CircleIndices{
 };
 
 const PositionMatrix StarPositions{
-	//x		//y		//z		//Colour
+	//x		//y		//z		//Colour - Green
 	 0.0f,	 0.3f,	0.0f,	0.0f, 1.0f, 0.0f,	//top
 	-0.3f,	 0.1f,	0.0f,	0.0f, 1.0f, 0.0f,	//top left
 	 0.3f,	 0.1f,	0.0f,	0.0f, 1.0f, 0.0f,	//top right
@@ -134,13 +140,14 @@ const PositionMatrix StarPositions{
 };
 
 const IndicesMatrix StarIndices{
+	//made of three triangles
 	3, 5, 2,
 	4, 6, 1,
 	0, 7, 8
 };
 
 const PositionMatrix CrossPositions{
-	//x		//y		//z		//Colour
+	//x		//y		//z		//Colour - Blue
 	-0.1f,	 0.5f,	0.0f,	0.0f, 0.0f, 1.0f,	//verticle top left
 	 0.1f,	 0.5f,	0.0f,	0.0f, 0.0f, 1.0f,	//verticle top right
 	-0.1f,	-0.5f,	0.0f,	0.0f, 0.0f, 1.0f,	//verticle bottom left
@@ -152,6 +159,7 @@ const PositionMatrix CrossPositions{
 };
 
 const IndicesMatrix CrossIndices{
+	// 2 vertical and 2 horizontal triangles
 	0, 1, 2,
 	1, 2, 3,
 	4, 5, 7,

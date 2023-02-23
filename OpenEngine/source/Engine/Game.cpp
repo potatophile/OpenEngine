@@ -51,11 +51,11 @@ void Game::Run()
             L"Game/Shader/SimpleShader/SimpleShader.sfrag"
             });
         //create a triangle
-        Graphics->CreateVAO(GeometricShapes::Polygon);
-        Graphics->CreateVAO(GeometricShapes::Triangle);
-        Graphics->CreateVAO(GeometricShapes::Circle);
-        Graphics->CreateVAO(GeometricShapes::Star);
-        Graphics->CreateVAO(GeometricShapes::Cross);
+        Graphics->CreateVAO(GeometricShapes::Polygon);      //Square or Diamond
+        Graphics->CreateVAO(GeometricShapes::Triangle);     //triangle
+        Graphics->CreateVAO(GeometricShapes::Circle);       //circle
+        Graphics->CreateVAO(GeometricShapes::Star);         //star
+        Graphics->CreateVAO(GeometricShapes::Cross);        //cross
     }
 
     //as long as the game is not over
