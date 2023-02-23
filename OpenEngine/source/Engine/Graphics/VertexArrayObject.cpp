@@ -23,6 +23,14 @@ VertexArrayObject::VertexArrayObject(GeometricShapes ChosenShape)
 		ChosenPositions = CirclePositions;
 		ChosenIndices = CircleIndices;
 		break;
+	case GeometricShapes::Star:
+		ChosenPositions = StarPositions;
+		ChosenIndices = StarIndices;
+		break;
+	case GeometricShapes::Cross:
+		ChosenPositions = CrossPositions;
+		ChosenIndices = CrossIndices;
+		break;
 	default:
 		break;
 	}

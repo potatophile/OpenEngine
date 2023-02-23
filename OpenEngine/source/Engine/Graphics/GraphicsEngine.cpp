@@ -116,19 +116,37 @@ void GraphicsEngine::Draw()
 		//move the object
 		glm::mat4 transform = glm::mat4(1.0f);
 
-		if (index == 0) {	//SQUARE
+		if (index == 0) {	//DIAMOND
 			//move in the x, y or z direction based on the amount added
-			transform = glm::translate(transform, glm::vec3(0.5f, 0.0f, 0.0f));
+			transform = glm::translate(transform, glm::vec3(-0.6f, -0.6f, 0.0f));		//translate to bottom-right
+			
 			//radians = rotation amount
 			//vec3 is the direction to rotate in
-			transform = glm::scale(transform, glm::vec3(0.5f, 0.5f, 1.0f));
+			transform = glm::rotate(transform, glm::radians(45.0f), glm::vec3(0.0f, 0.0f, 1.0));	//rotate by 45 radians
+			
+			transform = glm::scale(transform, glm::vec3(0.5f, 0.5f, 1.0f));			//scale down to half size
 		}
 		else if(index == 1) {//TRIANGLE
-			transform = glm::translate(transform, glm::vec3(-0.5f, 0.0f, 0.0f));
+			transform = glm::translate(transform, glm::vec3(-0.7f, 0.7f, 0.0f));		//Translate to top-left
+			
 			//x and y will work for 2D shapes
 			//z must be larger than 0 to make it visible
-			transform = glm::rotate(transform, glm::radians(30.0f), glm::vec3(0.0f, 0.0f, 1.0));
-			//transform = glm::scale(transform, glm::vec3(0.5f, 0.5f , 1.0f));
+			transform = glm::scale(transform, glm::vec3(0.5f, 0.5f , 1.0f));			//scale down to half size
+		}
+		else if (index == 2) {//CIRCLE
+			transform = glm::translate(transform, glm::vec3(0.0f, 0.0f, 0.0f));			//translate to center
+
+			transform = glm::scale(transform, glm::vec3(0.8f, 0.8f, 1.0f));				//scale down to 0.7
+		}
+		else if (index == 3) {//STAR
+			transform = glm::translate(transform, glm::vec3(0.6f, 0.6f, 0.0f));			//translate to top-right
+		}
+		else if (index == 4) {//CROSS
+			transform = glm::translate(transform, glm::vec3(0.6f, -0.6f, 0.0f));		//translate to bottom-left
+			
+			transform = glm::scale(transform, glm::vec3(0.6f, 0.6f, 1.0f));				//scale down to half size
+			
+			transform = glm::rotate(transform, glm::radians(45.0f), glm::vec3(0.0f, 0.0f, 1.0));	//rotate by 45 radians
 		}
 
 		Shader->SetMat4("transform", transform);

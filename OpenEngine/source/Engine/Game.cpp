@@ -53,6 +53,9 @@ void Game::Run()
         //create a triangle
         Graphics->CreateVAO(GeometricShapes::Polygon);
         Graphics->CreateVAO(GeometricShapes::Triangle);
+        Graphics->CreateVAO(GeometricShapes::Circle);
+        Graphics->CreateVAO(GeometricShapes::Star);
+        Graphics->CreateVAO(GeometricShapes::Cross);
     }
 
     //as long as the game is not over
