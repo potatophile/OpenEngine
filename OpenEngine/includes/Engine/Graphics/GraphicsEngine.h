@@ -29,6 +29,10 @@ public:
 	//@param 2 - Fragment Shader
 	void CreateShader(VFShaderParams ShaderFilePaths);
 
+	//create a texture and add it to the texture stack
+	//avoid duplicates
+	TexturePtr CreateTexture(const char* FilePath);
+
 private:
 	//this will hold the window
 	SDL_Window* SdlWindow;
@@ -43,4 +47,6 @@ private:
 
 	//single shader
 	ShaderPtr Shader;
+	//store a vector of textures
+	TexturePtrStack TextureStack;
 };
