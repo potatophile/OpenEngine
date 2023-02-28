@@ -4,6 +4,7 @@
 #include "Engine/Graphics/ShaderProgram.h"
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
+#include "Engine/Graphics/Texture.h"
 
 GraphicsEngine::GraphicsEngine()
 {
@@ -14,12 +15,14 @@ GraphicsEngine::GraphicsEngine()
 
 GraphicsEngine::~GraphicsEngine()
 {
-	cout << "Destroy Graphics Engine..." << endl;
+	//remove textures from memory
+	TextureStack.clear();		//clear() empties the array/vector
+
 	//this will handle deleting the sdl window from memory
 	SDL_DestroyWindow(SdlWindow);
 	//destroy the GL Context for sdl
 	SDL_GL_DeleteContext(SdlGLContext);
-	//close tthe sdl window
+	//close the sdl window
 	SDL_Quit();
 
 	cout << "Destroyed Graphics Engine..." << endl;
@@ -153,7 +156,7 @@ void GraphicsEngine::CreateVAO(GeometricShapes Shape)
 {
 	//create a new VAO as a shared pointer
 	VAOPtr NewVAO = make_shared<VAO>(Shape);
-	//Add it to the stack
+	//Add it to the stack. push_back to add to a vector
 	VAOs.push_back(NewVAO);
 }
 
@@ -165,6 +168,40 @@ void GraphicsEngine::CreateShader(VFShaderParams ShaderFilePaths)
 	NewShader->InitVFShader(ShaderFilePaths);
 	//add the shader to our graphics engine
 	Shader = NewShader;
+}
+
+TexturePtr GraphicsEngine::CreateTexture(const char* FilePath)
+{
+	TexturePtr NewTexture = nullptr;
+	
+	//Run through all the texture and check if one with the same path exists
+	for (TexturePtr TestTexture : TextureStack) {
+		//if we find a texture with the same file path
+		if (TestTexture->GetFilePath() == FilePath) {
+			//pass in the already created texture
+			NewTexture = TestTexture;
+			cout << "Texture found: Assigning current texture." << endl;
+			break;
+		}
+	}
+
+	//if there is no texture already existing
+	if (NewTexture == nullptr) {
+		cout << "Creating a new texture..." << endl;
+
+		//create a new texture as a shared ptr
+		NewTexture = make_shared<Texture>();
+
+		//if the file was found assign it to the texture stack
+		if (NewTexture->CreateTextureFromFilePath(FilePath)) {
+			cout << "Texture " << NewTexture->GetID() << " creation successful! Adding to Texture Stack." << endl;
+
+			//add the texture to the texture stack
+			TextureStack.push_back(NewTexture);
+		}
+	}
+
+	return NewTexture;
 }
 
 void GraphicsEngine::HandleWireframeMode(bool bShowWireframeMode)

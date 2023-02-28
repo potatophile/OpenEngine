@@ -23,7 +23,8 @@ Game::Game()
 
 Game::~Game()
 {
-    //
+    //since nothing else is storing the graphics in memory
+    //this will destroy the graphics from the memory
     Graphics = nullptr;
 
     cout << "Game Over..." << endl;
@@ -47,10 +48,13 @@ void Game::Run()
     if (!bIsGameOver) {
         //create a shader
         Graphics->CreateShader({
-            L"Game/Shader/SimpleShader/SimpleShader.svert",
-            L"Game/Shader/SimpleShader/SimpleShader.sfrag"
+            L"Game/Shader/TextureShader/TextureShader.svert",
+            L"Game/Shader/TextureShader/TextureShader.sfrag"
             });
-        //create a triangle
+
+        Graphics->CreateTexture("Game/Textures/Spongebob.jpg");
+
+        //create VAOs
         Graphics->CreateVAO(GeometricShapes::Polygon);
         Graphics->CreateVAO(GeometricShapes::Triangle);
     }

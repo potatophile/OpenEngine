@@ -3,10 +3,10 @@
 #include "Engine/CoreMinimal.h"
 
 const PositionMatrix TrianglePositions{
-	//x		//y		//z		//Colour
-	-0.5f,	-0.5f,	0.0f,	1.0f, 0.0f, 0.0f,	//bottom left
-	 0.5f,	-0.5f,	0.0f,	0.0f, 1.0f, 0.0f,	//bottom right
-	 0.0f,	 0.5f,	0.0f,	0.0f, 0.0f, 1.0f	//top
+	//x		//y		//z		//Colour			//tex coordss
+	-0.5f,	-0.5f,	0.0f,	1.0f, 0.0f, 0.0f,	0.0f, 0.0f,		//bottom left
+	 0.5f,	-0.5f,	0.0f,	0.0f, 1.0f, 0.0f,	1.0f, 0.0f,		//bottom right
+	 0.0f,	 0.5f,	0.0f,	0.0f, 0.0f, 1.0f,	0.5f, 1.0f		//top
 };
 
 const IndicesMatrix TriangleIndices{
@@ -14,11 +14,11 @@ const IndicesMatrix TriangleIndices{
 };
 
 const PositionMatrix PolyPositions{
-	//x		//y		//z		//Colour
-	-0.5f,	-0.5f,	0.0f,	0.0f, 1.0f, 0.0f,	//bottom left
-	 0.5f,	-0.5f,	0.0f,	0.0f, 1.0f, 0.0f,	//bottom right
-	 0.5f,	 0.5f,	0.0f,	0.0f, 1.0f, 0.0f,	//top right
-	-0.5f,	 0.5f,	0.0f,	0.0f, 1.0f, 0.0f,	//top left
+	//x		//y		//z		//Colour			//texture co-ords
+	-0.5f,	-0.5f,	0.0f,	0.0f, 1.0f, 0.0f,	0.0f, 0.0f,		//bottom left
+	 0.5f,	-0.5f,	0.0f,	0.0f, 1.0f, 0.0f,	1.0f, 0.0f,		//bottom right
+	 0.5f,	 0.5f,	0.0f,	0.0f, 1.0f, 0.0f,	1.0f, 1.0f,		//top right
+	-0.5f,	 0.5f,	0.0f,	0.0f, 1.0f, 0.0f,	0.0f, 1.0f		//top left
 };
 
 const IndicesMatrix PolyIndices{
@@ -27,16 +27,16 @@ const IndicesMatrix PolyIndices{
 };
 
 const PositionMatrix CirclePositions{
-	//x		//y		//z
-	 0.0f,   0.0f,  0.0f,		//center
-	-0.5f,	 0.0f,	0.0f,		//left
-	-0.35f,  0.35f,	0.0f,		//top left
-	 0.0f,	 0.5f,	0.0f,		//top center
-	 0.35f,	 0.35f,	0.0f,		//top right
-	 0.5f,	 0.0f,	0.0f,		//right
-	 0.35f,	-0.35f,	0.0f,		//bottom right
-	 0.0f,	-0.5f,	0.0f,		//bottom center
-	-0.35f,	-0.35f,	0.0f,		//bottom left	 
+	//x		//y		//z		//texture coordinates
+	 0.0f,   0.0f,  0.0f,	0.0f, 0.0f,		//center
+	-0.5f,	 0.0f,	0.0f,	0.0f, 0.0f,		//left
+	-0.35f,  0.35f,	0.0f,	0.0f, 0.0f,		//top left
+	 0.0f,	 0.5f,	0.0f,	0.0f, 0.0f,		//top center
+	 0.35f,	 0.35f,	0.0f,	0.0f, 0.0f,		//top right
+	 0.5f,	 0.0f,	0.0f,	0.0f, 0.0f,		//right
+	 0.35f,	-0.35f,	0.0f,	0.0f, 0.0f,		//bottom right
+	 0.0f,	-0.5f,	0.0f,	0.0f, 0.0f,		//bottom center
+	-0.35f,	-0.35f,	0.0f,	0.0f, 0.0f		//bottom left	 
 };
 
 const IndicesMatrix CircleIndices{
