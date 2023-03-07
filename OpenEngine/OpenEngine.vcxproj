@@ -136,6 +136,7 @@
     <ClCompile Include="Game\Source.cpp" />
     <ClCompile Include="source\Engine\Game.cpp" />
     <ClCompile Include="source\Engine\Graphics\GraphicsEngine.cpp" />
+    <ClCompile Include="source\Engine\Graphics\Mesh.cpp" />
     <ClCompile Include="source\Engine\Graphics\ShaderProgram.cpp" />
     <ClCompile Include="source\Engine\Graphics\Texture.cpp" />
     <ClCompile Include="source\Engine\Graphics\VertexArrayObject.cpp" />
@@ -143,10 +144,13 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="includes\Engine\CoreMinimal.h" />
+    <ClInclude Include="includes\Engine\Game.h" />
     <ClInclude Include="includes\Engine\Graphics\GraphicsEngine.h" />
+    <ClInclude Include="includes\Engine\Graphics\Mesh.h" />
     <ClInclude Include="includes\Engine\Graphics\ShaderProgram.h" />
     <ClInclude Include="includes\Engine\Graphics\Texture.h" />
     <ClInclude Include="includes\Engine\Graphics\VertexArrayObject.h" />
+    <ClInclude Include="includes\Engine\Math\Transformations.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Game\Shader\TextureShader\TextureShader.sfrag" />

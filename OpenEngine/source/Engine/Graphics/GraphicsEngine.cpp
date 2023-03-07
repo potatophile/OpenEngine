@@ -1,6 +1,6 @@
 #include "Engine/Graphics/GraphicsEngine.h"
 #include "GLEW/glew.h"
-#include "Engine/Graphics/VertexArrayObject.h"
+#include "Engine/Graphics/Mesh.h"
 #include "Engine/Graphics/ShaderProgram.h"
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
@@ -15,6 +15,12 @@ GraphicsEngine::GraphicsEngine()
 
 GraphicsEngine::~GraphicsEngine()
 {
+	//clear the mesh stack
+	MeshStack.clear();
+
+	//clear shader
+	Shader = nullptr;
+
 	//remove textures from memory
 	TextureStack.clear();		//clear() empties the array/vector
 
@@ -110,39 +116,10 @@ void GraphicsEngine::Draw()
 
 	HandleWireframeMode(false);
 
-	UNint index = 0;
-
-	//render between these two functions
-	for (VAOPtr VAO : VAOs) {
-		Shader->RunShader();
-
-		//move the object
-		glm::mat4 transform = glm::mat4(1.0f);
-
-		if (index == 0) {	//SQUARE
-			//move in the x, y or z direction based on the amount added
-			transform = glm::translate(transform, glm::vec3(0.5f, 0.0f, 0.0f));
-			//radians = rotation amount
-			//vec3 is the direction to rotate in
-			transform = glm::scale(transform, glm::vec3(0.5f, 0.5f, 1.0f));
-		}
-		else if(index == 1) {//TRIANGLE
-			transform = glm::translate(transform, glm::vec3(-0.5f, 0.0f, 0.0f));
-			//x and y will work for 2D shapes
-			//z must be larger than 0 to make it visible
-			transform = glm::rotate(transform, glm::radians(30.0f), glm::vec3(0.0f, 0.0f, 1.0));
-			//transform = glm::scale(transform, glm::vec3(0.5f, 0.5f , 1.0f));
-		}
-
-		Shader->SetMat4("transform", transform);
-
-		//Draw each VAO
-		VAO->Draw();
-
-		index++;
+	//run through each mesh and call its draw method
+	for (MeshPtr LMesh : MeshStack) {
+		LMesh->Draw();
 	}
-
-	index = 0;
 
 	PresentGraphics();
 }
@@ -152,15 +129,23 @@ SDL_Window* GraphicsEngine::GetWindow() const
 	return SdlWindow;
 }
 
-void GraphicsEngine::CreateVAO(GeometricShapes Shape)
+MeshPtr GraphicsEngine::CreateSimpleMeshShape(GeometricShapes Shape, ShaderPtr MeshShader, TexturePtrStack MeshTextures)
 {
-	//create a new VAO as a shared pointer
-	VAOPtr NewVAO = make_shared<VAO>(Shape);
-	//Add it to the stack. push_back to add to a vector
-	VAOs.push_back(NewVAO);
+	//initialize a new mesh class
+	MeshPtr NewMesh = make_shared<Mesh>();
+
+	//make sure it worked
+	if (!NewMesh->CreateSimpleShape(Shape, MeshShader, MeshTextures))
+		return nullptr;
+
+	//add mesh into the stack of meshses to be rendered
+	MeshStack.push_back(NewMesh);
+
+	//return the new mesh
+	return NewMesh;
 }
 
-void GraphicsEngine::CreateShader(VFShaderParams ShaderFilePaths)
+ShaderPtr GraphicsEngine::CreateShader(VFShaderParams ShaderFilePaths)
 {
 	//create a new shader class
 	ShaderPtr NewShader = make_shared<ShaderProgram>();
@@ -168,6 +153,8 @@ void GraphicsEngine::CreateShader(VFShaderParams ShaderFilePaths)
 	NewShader->InitVFShader(ShaderFilePaths);
 	//add the shader to our graphics engine
 	Shader = NewShader;
+
+	return NewShader;
 }
 
 TexturePtr GraphicsEngine::CreateTexture(const char* FilePath)
