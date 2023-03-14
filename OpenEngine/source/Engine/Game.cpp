@@ -149,11 +149,11 @@ void Game::Update()
         CameraInput.y = -1.0f;
     }
     //rotate camera left
-    if (GameInput->IsKeyDown(SDL_SCANCODE_LEFT)) {
-        CameraInput.y = 1.0f;
-    }
-    //rotate camera right
-    if (GameInput->IsKeyDown(SDL_SCANCODE_RIGHT))
+    //if (GameInput->IsKeyDown(SDL_SCANCODE_LEFT)) {
+    //    CameraInput.y = 1.0f;
+    //}
+    ////rotate camera right
+    //if (GameInput->IsKeyDown(SDL_SCANCODE_RIGHT))
 
     CameraInput *= 1.0f * GetFDeltaTime();
 
