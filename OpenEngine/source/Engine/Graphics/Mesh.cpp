@@ -3,6 +3,8 @@
 #include "Engine/Graphics/Texture.h"
 #include "Engine/Graphics/VertexArrayObject.h"
 #include "glm/gtc/matrix_transform.hpp"
+#include "Engine/Game.h"
+#include "Engine/Graphics/GraphicsEngine.h"
 
 Mesh::Mesh()
 {
@@ -77,8 +79,11 @@ void Mesh::Draw()
 		MatTransform = glm::scale(MatTransform, Transform.Scale);
 
 		//update the shader with the new transforms
-		MeshShader->SetMat4("transform", MatTransform);
+		MeshShader->SetMat4("model", MatTransform);
 	}
+
+	//create the world and screen positions for this object
+	Game::GetGameInstance().GetGraphics()->ApplyScreenTransformations(MeshShader);
 
 	//draw the VAO
 	MeshVAO->Draw();

@@ -23,6 +23,10 @@ VertexArrayObject::VertexArrayObject(GeometricShapes ChosenShape)
 		ChosenPositions = CirclePositions;
 		ChosenIndices = CircleIndices;
 		break;
+	case GeometricShapes::Cube:
+		ChosenPositions = CubePositions;
+		ChosenIndices = CubeIndicies;
+		break;
 	default:
 		break;
 	}
