@@ -1,6 +1,7 @@
 #pragma once
-#include "Engine/Graphics/GraphicsEngine.h"
 #include "CoreMinimal.h"
+
+class Input;
 
 class Game {
 public:
@@ -19,6 +20,11 @@ public:
 
 	//get less precise delta time
 	float GetFDeltaTime() { return static_cast<float>(DeltaTime); }
+
+	//return the graphics engine
+	GraphicsEnginePtr GetGraphics() { return Graphics; }
+	//set bIsGameOver to true
+	void CloseApp() { bIsGameOver = true; }
 private:
 	Game();
 	~Game();
@@ -49,7 +55,10 @@ private:
 	//the time between each frame
 	double DeltaTime;
 
+	//read the input of the player
+	Input* GameInput;
+
 	//temporary mesh variables
-	MeshPtr Tri;
+	MeshPtr Poly2;
 	MeshPtr Poly;
 };

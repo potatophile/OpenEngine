@@ -2,6 +2,7 @@
 
 #include "Engine/CoreMinimal.h"
 #include "SDL2/SDL.h"
+#include "Engine/Math/Transformations.h"
 
 class GraphicsEngine {
 public:
@@ -33,6 +34,10 @@ public:
 	//avoid duplicates
 	TexturePtr CreateTexture(const char* FilePath);
 
+	//create the 3D space for the model to relate itself to
+	//screen and camera coordinates
+	void ApplyScreenTransformations(ShaderPtr Shader);
+
 private:
 	//this will hold the window
 	SDL_Window* SdlWindow;
@@ -49,4 +54,8 @@ private:
 	TexturePtrStack TextureStack;
 	//store all meshes in the game
 	MeshPtrStack MeshStack;
+
+public:
+	//default camera position
+	Vector3 EngineDefaultCam;
 };

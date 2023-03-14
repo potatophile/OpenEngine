@@ -1,5 +1,7 @@
 #include "Engine/Game.h"
 #include "Engine/Graphics/Mesh.h"
+#include "Engine/Graphics/GraphicsEngine.h"
+#include "Engine/Input.h"
 
 Game& Game::GetGameInstance()
 {
@@ -47,6 +49,9 @@ void Game::Start(const char* WTitle, bool bFullscreen, int WWidth, int WHeight)
 void Game::Run()
 {
     if (!bIsGameOver) {
+        //create an input object to detect input
+        GameInput = new Input();
+
         //create a shader
         ShaderPtr TextureShader = Graphics->CreateShader({
             L"Game/Shader/TextureShader/TextureShader.svert",
@@ -58,16 +63,22 @@ void Game::Run()
         TexturePtr TGreenMosaic = Graphics->CreateTexture("Game/Textures/GreenMosaic.jpg");
 
         //create meshes
-        Poly = Graphics->CreateSimpleMeshShape(GeometricShapes::Polygon, TextureShader, { TBlueTiles });
-        Tri = Graphics->CreateSimpleMeshShape(GeometricShapes::Triangle, TextureShader, { TGreenMosaic });
+        Poly = Graphics->CreateSimpleMeshShape(GeometricShapes::Cube, TextureShader, { TGreenMosaic });
+        Poly2 = Graphics->CreateSimpleMeshShape(GeometricShapes::Cube, TextureShader, { TBlueTiles });
+        
+        MeshPtr test = Graphics->CreateSimpleMeshShape(GeometricShapes::Polygon, TextureShader, { TBlueTiles });
+        
+        test->Transform.Rotation.y = 60.0f;
 
         //initial transformations for the meshes
-        Poly->Transform.Location.x = 0.5f;
-        Tri->Transform.Location.x = -0.5f;
+        Poly->Transform.Location.x = 1.0f;
+
+        Poly2->Transform.Location.x = -1.0f;
+        //Tri->Transform.Location.x = -0.5f;
 
         //Poly->Transform.Rotation.z = 45.0f;
 
-        Poly->Transform.Scale = Vector3(0.5f);
+        //Poly->Transform.Scale = Vector3(0.5f);
     }
 
     //as long as the game is not over
@@ -87,20 +98,8 @@ void Game::Run()
 
 void Game::ProcessInput()
 {
-    //creating event for game loop to close when a key is pressed
-    SDL_Event PollEvent;
-
-    //while the loop is waiting for input
-    while (SDL_PollEvent(&PollEvent)) {
-        //checking what input was pressed
-        switch (PollEvent.type) {
-        case SDL_QUIT:      //close button clicked
-            bIsGameOver = true;
-            break;
-        default:
-            break;
-        }
-    }
+    //run the input detection for our game input
+    GameInput->ProcessInput();
 }
 
 void Game::Update()
@@ -119,18 +118,46 @@ void Game::Update()
 
     //TODO:Handle Logic
     Poly->Transform.Rotation.z += 50.0f * GetFDeltaTime();
-
-    static int MoveUp = 1.0f;
-
-    if (Tri->Transform.Location.y > 0.5f) {
-        MoveUp = -1.0f;
-    }
+    Poly->Transform.Rotation.x += 50.0f * GetFDeltaTime();
+    Poly->Transform.Rotation.y += 50.0f * GetFDeltaTime();
     
-    if (Tri->Transform.Location.y < -0.5f) {
-        MoveUp = 1.0f;
-    }
+    Poly2->Transform.Rotation.z -= 50.0f * GetFDeltaTime();
+    Poly2->Transform.Rotation.x -= 50.0f * GetFDeltaTime();
+    Poly2->Transform.Rotation.y -= 50.0f * GetFDeltaTime();
+    
+    Vector3 CameraInput = Vector3(0.0f);
+    Vector3 CameraRotate = Vector3(0.0f);
 
-    Tri->Transform.Location.y += (1.0f * MoveUp) * GetFDeltaTime();
+    //move camera foward
+    if (GameInput->IsKeyDown(SDL_SCANCODE_W)) {
+        CameraInput.z = 1.0f;
+    }
+    //move camera backward
+    if (GameInput->IsKeyDown(SDL_SCANCODE_S)) {
+        CameraInput.z = -1.0f;
+    }
+    //move camera left
+    if (GameInput->IsKeyDown(SDL_SCANCODE_A)) {
+        CameraInput.x = 1.0f;
+    }
+    //move camera right
+    if (GameInput->IsKeyDown(SDL_SCANCODE_D)) {
+        CameraInput.x = -1.0f;
+    }
+    //move camera up
+    if (GameInput->IsKeyDown(SDL_SCANCODE_Q)) {
+        CameraInput.y = -1.0f;
+    }
+    //rotate camera left
+    //if (GameInput->IsKeyDown(SDL_SCANCODE_LEFT)) {
+    //    CameraInput.y = 1.0f;
+    //}
+    ////rotate camera right
+    //if (GameInput->IsKeyDown(SDL_SCANCODE_RIGHT))
+
+    CameraInput *= 1.0f * GetFDeltaTime();
+
+    Graphics->EngineDefaultCam += CameraInput;
 }
 
 void Game::Draw()
@@ -140,4 +167,5 @@ void Game::Draw()
 
 void Game::CloseGame()
 {
+    delete GameInput;
 }
