@@ -61,6 +61,7 @@ void Game::Run()
         //create textures
         TexturePtr TBlueTiles = Graphics->CreateTexture("Game/Textures/BlueTiles.jpg");
         TexturePtr TGreenMosaic = Graphics->CreateTexture("Game/Textures/GreenMosaic.jpg");
+        TexturePtr TUVMap = Graphics->CreateTexture("Game/Textures/UVMapping.jpg");
 
         //create meshes
         Poly = Graphics->CreateSimpleMeshShape(GeometricShapes::Cube, TextureShader, { TGreenMosaic });
@@ -68,7 +69,7 @@ void Game::Run()
         
         MeshPtr test = Graphics->CreateSimpleMeshShape(GeometricShapes::Polygon, TextureShader, { TBlueTiles });
         
-        test->Transform.Rotation.y = 60.0f;
+        test->Transform.Rotation.y = 90.0f;
 
         //initial transformations for the meshes
         Poly->Transform.Location.x = 1.0f;
@@ -147,6 +148,9 @@ void Game::Update()
     //move camera up
     if (GameInput->IsKeyDown(SDL_SCANCODE_Q)) {
         CameraInput.y = -1.0f;
+    }
+    if (GameInput->IsKeyDown(SDL_SCANCODE_E)) {
+        CameraInput.y = 1.0f;
     }
     //rotate camera left
     //if (GameInput->IsKeyDown(SDL_SCANCODE_LEFT)) {
