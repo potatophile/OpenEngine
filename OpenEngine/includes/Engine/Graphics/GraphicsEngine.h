@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Engine/CoreMinimal.h"
 #include "SDL2/SDL.h"
+#include "Engine/CoreMinimal.h"
 #include "Engine/Math/Transformations.h"
 
 class GraphicsEngine {
@@ -56,6 +56,6 @@ private:
 	MeshPtrStack MeshStack;
 
 public:
-	//default camera position
-	Vector3 EngineDefaultCam;
+	//default camera
+	CameraPtr EngineDefaultCam;
 };
