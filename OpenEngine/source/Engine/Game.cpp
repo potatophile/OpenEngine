@@ -62,17 +62,37 @@ void Game::Run()
         //create textures
         TexturePtr TBlueTiles = Graphics->CreateTexture("Game/Textures/BlueTiles.jpg");
         TexturePtr TGreenMosaic = Graphics->CreateTexture("Game/Textures/GreenMosaic.jpg");
+        TexturePtr TUVMAP = Graphics->CreateTexture("Game/Textures/UVMapping.jpg");
+        TexturePtr TSpongeBob = Graphics->CreateTexture("Game/Textures/Spongebob.jpg");
 
-        //create meshes
-        Poly = Graphics->CreateSimpleMeshShape(GeometricShapes::Cube, TextureShader, { TGreenMosaic });
-        Poly2 = Graphics->CreateSimpleMeshShape(GeometricShapes::Cube, TextureShader, { TBlueTiles });
+        //create meshes with two textures blended together
+        Poly = Graphics->CreateSimpleMeshShape(GeometricShapes::Cube, TextureShader, { TBlueTiles, TGreenMosaic });
+        Poly2 = Graphics->CreateSimpleMeshShape(GeometricShapes::Cube, TextureShader, { TUVMAP, TSpongeBob });
         
-        
+        //polygons with unique texture assigned to individual mesh
+        MeshPtr Texture1 = Graphics->CreateSimpleMeshShape(GeometricShapes::Polygon, TextureShader, { TBlueTiles });
+        MeshPtr Texture2 = Graphics->CreateSimpleMeshShape(GeometricShapes::Polygon, TextureShader, { TGreenMosaic });
+        MeshPtr Texture3 = Graphics->CreateSimpleMeshShape(GeometricShapes::Polygon, TextureShader, { TUVMAP });
+        MeshPtr Texture4 = Graphics->CreateSimpleMeshShape(GeometricShapes::Polygon, TextureShader, { TSpongeBob });
         //test->Transform.Rotation.y = 60.0f;
 
         //initial transformations for the meshes
-        Poly->Transform.Location = Vector3(0.0f, 0.0f, 0.0f);
-        Poly2->Transform.Location = Vector3(0.0f, 0.0f, 0.0f);
+        Poly->Transform.Location = Vector3(0.0f, 0.0f, 0.5f);
+        Poly2->Transform.Location = Vector3(0.0f, 0.0f, -0.5f);
+
+        //polygons translated to each corner of the screen
+        Texture1->Transform.Location = Vector3(0.0f, 1.0f, -2.0f);
+        Texture1->Transform.Rotation.y = 90.0f;
+
+        Texture2->Transform.Location = Vector3(0.0f, 1.0f, 2.0f);
+        Texture2->Transform.Rotation.y = 90.0f;
+        
+        Texture3->Transform.Location = Vector3(0.0f, -1.0f, -2.0f);
+        Texture3->Transform.Rotation.y = 90.0f;
+        
+        Texture4->Transform.Location = Vector3(0.0f, -1.0f, 2.0f);
+        Texture4->Transform.Rotation.y = 90.0f;
+
 
         //Tri->Transform.Location.x = -0.5f;
         //Poly->Transform.Rotation.z = 45.0f;
