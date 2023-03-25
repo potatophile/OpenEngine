@@ -173,6 +173,8 @@ void Game::Update()
         CameraInput += CamDirection.Up;
     }
 
+    CameraInput *= 3.0f * GetFDeltaTime();
+
     Vector3 NewLocation = Graphics->EngineDefaultCam->GetTransforms().Location += CameraInput;
     Graphics->EngineDefaultCam->Translate(NewLocation);
 
