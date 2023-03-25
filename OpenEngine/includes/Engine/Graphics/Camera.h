@@ -33,12 +33,17 @@ public:
 
 	//return a view matrix that considers positions and rotations
 	glm::mat4 GetViewMatrix() const;
-
+	
 	//rotate the camera based on yaw
 	void RotatePitch(float Amount);
 
 	//rotate the camera based on pitch
 	void RotateYaw(float Amount);
+
+	//set the camera FOV based on mouse wheel scroll
+	void SetFOV(float Amount);
+	//set the camera FOV to default (70.0f)
+	void DefaultFOV();
 
 private:
 	//Find the current direction vectors based on the rotation of YAW and PITCH of the camera

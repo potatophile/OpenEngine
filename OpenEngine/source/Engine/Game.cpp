@@ -147,19 +147,34 @@ void Game::Update()
     //move camera up
     if (GameInput->IsKeyDown(SDL_SCANCODE_Q)) {
         CameraInput += -CamDirection.Up;
-    }//move camera down
+    }
+    //move camera down
     if (GameInput->IsKeyDown(SDL_SCANCODE_E)) {
         CameraInput += CamDirection.Up;
     }
-   
-    CameraInput *= 3.0f * GetFDeltaTime();
 
     Vector3 NewLocation = Graphics->EngineDefaultCam->GetTransforms().Location += CameraInput;
     Graphics->EngineDefaultCam->Translate(NewLocation);
 
+    //when the right mouse button is clicked, allow camera rotation
     if (GameInput->IsMouseButtonDown(MouseButtons::RIGHT)) {
         Graphics->EngineDefaultCam->RotatePitch(-GameInput->MouseYDelta * GetFDeltaTime() * 25.0f);
         Graphics->EngineDefaultCam->RotateYaw(GameInput->MouseXDelta * GetFDeltaTime() * 25.0f);
+    }
+    //when the middle mouse button is clicked, set the Camera FOV to default value
+    if (GameInput->IsMouseButtonDown(MouseButtons::MIDDLE)) {
+        Graphics->EngineDefaultCam->DefaultFOV();
+        cout << "FOV set to default (70.0)" << endl;
+    }
+    //when mouse wheel is scrolled up, increase the FOV
+    if (GameInput->ScrollDelta > 0) {
+        Graphics->EngineDefaultCam->SetFOV(GameInput->ScrollDelta += 5.0f * GetFDeltaTime());
+        cout << GameInput->ScrollDelta << endl;
+    }
+    //when mouse wheel is scrolled down, decrease the FOV
+    if (GameInput->ScrollDelta < 0) {
+        Graphics->EngineDefaultCam->SetFOV(GameInput->ScrollDelta -= 5.0f * GetFDeltaTime());
+        cout << GameInput->ScrollDelta << endl;
     }
 }
 
