@@ -3,6 +3,7 @@
 #include "Engine/Graphics/GraphicsEngine.h"
 #include "Engine/Input.h"
 #include "Engine/Graphics/Camera.h"
+#include "Engine/Graphics/Material.h"
 
 Game& Game::GetGameInstance()
 {
@@ -15,6 +16,11 @@ void Game::DestroyGameInstance()
     static Game* GameInstance = &GetGameInstance();
 
     delete GameInstance;
+}
+
+TexturePtr Game::GetDefaultEngineTexture()
+{
+    return Graphics->DefaultEngineTexture;
 }
 
 Game::Game()
@@ -63,9 +69,17 @@ void Game::Run()
         TexturePtr TBlueTiles = Graphics->CreateTexture("Game/Textures/BlueTiles.jpg");
         TexturePtr TGreenMosaic = Graphics->CreateTexture("Game/Textures/GreenMosaic.jpg");
 
+        //create the materials
+        MaterialPtr MGreenMosaic = make_shared<Material>();
+        MaterialPtr MBlueTiles = make_shared<Material>();
+
+        //assign the base colour of the materials using the textures
+        MGreenMosaic->BaseColour = TGreenMosaic;
+        MBlueTiles->BaseColour = TBlueTiles;
+
         //create meshes
-        Poly = Graphics->CreateSimpleMeshShape(GeometricShapes::Cube, TextureShader, { TGreenMosaic });
-        Poly2 = Graphics->CreateSimpleMeshShape(GeometricShapes::Cube, TextureShader, { TBlueTiles });
+        Poly = Graphics->CreateSimpleMeshShape(GeometricShapes::Cube, TextureShader, { MGreenMosaic });
+        Poly2 = Graphics->CreateSimpleMeshShape(GeometricShapes::Cube, TextureShader, { MBlueTiles });
         
         
         //test->Transform.Rotation.y = 60.0f;
@@ -114,7 +128,7 @@ void Game::Update()
     LastFrameTime = CurrentFrameTime;
 
 
-    //TODO:Handle Logic
+    //TODO:Handle Logic 
     Poly->Transform.Rotation.z += 50.0f * GetFDeltaTime();
     Poly->Transform.Rotation.x += 50.0f * GetFDeltaTime();
     Poly->Transform.Rotation.y += 50.0f * GetFDeltaTime();
@@ -128,6 +142,8 @@ void Game::Update()
 
     CDirections CamDirection = Graphics->EngineDefaultCam->GetDirections();
     
+    Graphics->EngineDefaultCam->GetCameraData().FarClip;
+
     //move camera foward
     if (GameInput->IsKeyDown(SDL_SCANCODE_W)) {
         CameraInput += CamDirection.Forward;
@@ -151,15 +167,17 @@ void Game::Update()
     if (GameInput->IsKeyDown(SDL_SCANCODE_E)) {
         CameraInput += CamDirection.Up;
     }
-   
-    CameraInput *= 3.0f * GetFDeltaTime();
 
-    Vector3 NewLocation = Graphics->EngineDefaultCam->GetTransforms().Location += CameraInput;
-    Graphics->EngineDefaultCam->Translate(NewLocation);
+    //move the camera based on input
+    Graphics->EngineDefaultCam->AddMovementInput(CameraInput);
 
     if (GameInput->IsMouseButtonDown(MouseButtons::RIGHT)) {
-        Graphics->EngineDefaultCam->RotatePitch(-GameInput->MouseYDelta * GetFDeltaTime() * 25.0f);
-        Graphics->EngineDefaultCam->RotateYaw(GameInput->MouseXDelta * GetFDeltaTime() * 25.0f);
+        Graphics->EngineDefaultCam->RotatePitch(-GameInput->MouseYDelta * GetFDeltaTime());
+        Graphics->EngineDefaultCam->RotateYaw(GameInput->MouseXDelta * GetFDeltaTime());
+        GameInput->ShowCursor(false);
+    }
+    else {
+        GameInput->ShowCursor(true);
     }
 }
 

@@ -110,7 +110,7 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(SolutionDir)OpenEngine\lib</AdditionalLibraryDirectories>
-      <AdditionalDependencies>glew32.lib;glew32s.lib;SDL2.lib;SDL2main.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>glew32.lib;glew32s.lib;SDL2.lib;SDL2main.lib;opengl32.lib;assimp-vc143-mtd.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Command>copy "$(SolutionDir)OpenEngine\lib\*.dll" "$(SolutionDir)$(Platform)\$(Configuration)</Command>
@@ -137,6 +137,7 @@
     <ClCompile Include="source\Engine\Game.cpp" />
     <ClCompile Include="source\Engine\Graphics\Camera.cpp" />
     <ClCompile Include="source\Engine\Graphics\GraphicsEngine.cpp" />
+    <ClCompile Include="source\Engine\Graphics\Material.cpp" />
     <ClCompile Include="source\Engine\Graphics\Mesh.cpp" />
     <ClCompile Include="source\Engine\Graphics\ShaderProgram.cpp" />
     <ClCompile Include="source\Engine\Graphics\Texture.cpp" />
@@ -149,9 +150,11 @@
     <ClInclude Include="includes\Engine\Game.h" />
     <ClInclude Include="includes\Engine\Graphics\Camera.h" />
     <ClInclude Include="includes\Engine\Graphics\GraphicsEngine.h" />
+    <ClInclude Include="includes\Engine\Graphics\Material.h" />
     <ClInclude Include="includes\Engine\Graphics\Mesh.h" />
     <ClInclude Include="includes\Engine\Graphics\ShaderProgram.h" />
     <ClInclude Include="includes\Engine\Graphics\Texture.h" />
+    <ClInclude Include="includes\Engine\Graphics\Vertex.h" />
     <ClInclude Include="includes\Engine\Graphics\VertexArrayObject.h" />
     <ClInclude Include="includes\Engine\Input.h" />
     <ClInclude Include="includes\Engine\Math\Transformations.h" />
