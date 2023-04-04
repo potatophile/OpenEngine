@@ -23,7 +23,10 @@ public:
 	SDL_Window* GetWindow() const;
 
 	//create a new mesh with material assigned
-	MeshPtr CreateSimpleMeshShape(GeometricShapes Shape, ShaderPtr MeshShader, MaterialPtr MeshMaterial);
+	ModelPtr CreateSimpleModelShape(GeometricShapes Shape, ShaderPtr MeshShader);
+
+	//import a 3D model based on a file path
+	ModelPtr ImportModel(const char* FilePath, ShaderPtr Shader);
 
 	//add new shader
 	//@param 1 - Vertex Shader
@@ -52,8 +55,8 @@ private:
 	ShaderPtr Shader;
 	//store a vector of textures
 	TexturePtrStack TextureStack;
-	//store all meshes in the game
-	MeshPtrStack MeshStack;
+	//store all models in the game
+	ModelPtrStack ModelStack;
 
 public:
 	//default camera
@@ -61,4 +64,7 @@ public:
 
 	//default texture
 	TexturePtr DefaultEngineTexture;
+
+	//default material
+	MaterialPtr DefaultEngineMaterial;
 };

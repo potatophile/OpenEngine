@@ -139,6 +139,7 @@
     <ClCompile Include="source\Engine\Graphics\GraphicsEngine.cpp" />
     <ClCompile Include="source\Engine\Graphics\Material.cpp" />
     <ClCompile Include="source\Engine\Graphics\Mesh.cpp" />
+    <ClCompile Include="source\Engine\Graphics\Model.cpp" />
     <ClCompile Include="source\Engine\Graphics\ShaderProgram.cpp" />
     <ClCompile Include="source\Engine\Graphics\Texture.cpp" />
     <ClCompile Include="source\Engine\Graphics\VertexArrayObject.cpp" />
@@ -152,6 +153,7 @@
     <ClInclude Include="includes\Engine\Graphics\GraphicsEngine.h" />
     <ClInclude Include="includes\Engine\Graphics\Material.h" />
     <ClInclude Include="includes\Engine\Graphics\Mesh.h" />
+    <ClInclude Include="includes\Engine\Graphics\Model.h" />
     <ClInclude Include="includes\Engine\Graphics\ShaderProgram.h" />
     <ClInclude Include="includes\Engine\Graphics\Texture.h" />
     <ClInclude Include="includes\Engine\Graphics\Vertex.h" />

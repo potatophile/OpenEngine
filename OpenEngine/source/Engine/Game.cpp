@@ -1,5 +1,5 @@
 #include "Engine/Game.h"
-#include "Engine/Graphics/Mesh.h"
+#include "Engine/Graphics/Model.h"
 #include "Engine/Graphics/GraphicsEngine.h"
 #include "Engine/Input.h"
 #include "Engine/Graphics/Camera.h"
@@ -21,6 +21,11 @@ void Game::DestroyGameInstance()
 TexturePtr Game::GetDefaultEngineTexture()
 {
     return Graphics->DefaultEngineTexture;
+}
+
+MaterialPtr Game::GetDefaultEngineMaterial()
+{
+    return Graphics->DefaultEngineMaterial;
 }
 
 Game::Game()
@@ -77,20 +82,39 @@ void Game::Run()
         MGreenMosaic->BaseColour = TGreenMosaic;
         MBlueTiles->BaseColour = TBlueTiles;
 
-        //create meshes
-        Poly = Graphics->CreateSimpleMeshShape(GeometricShapes::Cube, TextureShader, { MGreenMosaic });
-        Poly2 = Graphics->CreateSimpleMeshShape(GeometricShapes::Cube, TextureShader, { MBlueTiles });
+        //create models
+        Poly = Graphics->CreateSimpleModelShape(GeometricShapes::Cube, TextureShader);
+        Poly2 = Graphics->CreateSimpleModelShape(GeometricShapes::Cube, TextureShader);
         
+        //set the materials of the models
+        Poly->SetMaterialBySlot(0, MBlueTiles);
+        Poly2->SetMaterialBySlot(0, MGreenMosaic);
         
-        //test->Transform.Rotation.y = 60.0f;
-
         //initial transformations for the meshes
         Poly->Transform.Location = Vector3(0.0f, 0.0f, 0.0f);
         Poly2->Transform.Location = Vector3(0.0f, 0.0f, 0.0f);
 
-        //Tri->Transform.Location.x = -0.5f;
-        //Poly->Transform.Rotation.z = 45.0f;
-        //Poly->Transform.Scale = Vector3(0.5f);
+        //import custom meshes
+        Wall = Graphics->ImportModel("Game/Models/damaged-wall/source/SM_Wall_Damaged.obj", TextureShader);
+
+        if (Wall != nullptr) {
+            Wall->Transform.Scale = Vector3(0.05f);
+            Wall->Transform.Rotation.y = 90.0f;
+            Wall->Transform.Location = Vector3(2.0f, -2.0f, 0.0f);
+
+            //transform the wall
+
+
+            //create the texture
+            TexturePtr TWall = Graphics->CreateTexture("Game/Models/damaged-wall/textures/Wall_Damaged_BC.png");
+
+            //create a material
+            MaterialPtr MWall = make_shared<Material>();
+            MWall->BaseColour = TWall;
+
+            //apply the material
+            Wall->SetMaterialBySlot(1, MWall);
+        }
     }
 
     //as long as the game is not over
