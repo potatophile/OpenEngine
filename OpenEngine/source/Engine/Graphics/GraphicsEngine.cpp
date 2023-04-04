@@ -5,6 +5,7 @@
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
 #include "Engine/Graphics/Texture.h"
+#include "Engine/Graphics/Camera.h"
 
 GraphicsEngine::GraphicsEngine()
 {
@@ -12,7 +13,7 @@ GraphicsEngine::GraphicsEngine()
 	SdlGLContext = NULL;
 	bWireframeMode = false;
 	//initialize camera -2.0 back on z axis
-	EngineDefaultCam = Vector3(0.0f, 0.0f, -2.0f);
+	EngineDefaultCam = make_shared<Camera>();
 }
 
 GraphicsEngine::~GraphicsEngine()
@@ -97,6 +98,9 @@ bool GraphicsEngine::InitGE(const char* WTitle, bool bFullscreen, int WWidth, in
 	//enable 3D depth
 	glEnable(GL_DEPTH_TEST);
 
+	//create the defualt engine texture
+	DefaultEngineTexture = CreateTexture("Game/Textures/GreyTexture.png");
+
 	return true;
 }
 
@@ -134,13 +138,13 @@ SDL_Window* GraphicsEngine::GetWindow() const
 	return SdlWindow;
 }
 
-MeshPtr GraphicsEngine::CreateSimpleMeshShape(GeometricShapes Shape, ShaderPtr MeshShader, TexturePtrStack MeshTextures)
+MeshPtr GraphicsEngine::CreateSimpleMeshShape(GeometricShapes Shape, ShaderPtr MeshShader, MaterialPtr MeshMaterial)
 {
 	//initialize a new mesh class
 	MeshPtr NewMesh = make_shared<Mesh>();
 
 	//make sure it worked
-	if (!NewMesh->CreateSimpleShape(Shape, MeshShader, MeshTextures))
+	if (!NewMesh->CreateSimpleShape(Shape, MeshShader, MeshMaterial))
 		return nullptr;
 
 	//add mesh into the stack of meshses to be rendered
@@ -199,9 +203,9 @@ TexturePtr GraphicsEngine::CreateTexture(const char* FilePath)
 void GraphicsEngine::ApplyScreenTransformations(ShaderPtr Shader)
 {
 	//the angle of the camera planes  - zoom
-	float FOV = 70.0f;
+	float FOV = EngineDefaultCam->GetCameraData().FOV;
 	//position of the camera/view space
-	Vector3 ViewPosition = EngineDefaultCam;
+	Vector3 ViewPosition = EngineDefaultCam->GetTransforms().Location;
 	//find the size of the screen and calculate the aspect ratio
 	int WWidth, WHeight = 0;
 	//use SDL to get the size of the window
@@ -214,10 +218,11 @@ void GraphicsEngine::ApplyScreenTransformations(ShaderPtr Shader)
 	glm::mat4 projection = glm::mat4(1.0f);
 
 	//update the coordinates for 3D
-	view = glm::translate(view, ViewPosition);
+	view = EngineDefaultCam->GetViewMatrix();
 	//create the perspective view to allow us to see in 3D
 	//also adjusting the near and far clip
-	projection = glm::perspective(glm::radians(FOV), AR, 0.01f, 1000.0f);
+	projection = glm::perspective(glm::radians(FOV), AR,
+		EngineDefaultCam->GetCameraData().NearClip, EngineDefaultCam->GetCameraData().FarClip);
 
 	Shader->SetMat4("view", view);
 	Shader->SetMat4("projection", projection);

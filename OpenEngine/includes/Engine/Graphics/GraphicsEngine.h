@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Engine/CoreMinimal.h"
 #include "SDL2/SDL.h"
+#include "Engine/CoreMinimal.h"
 #include "Engine/Math/Transformations.h"
 
 class GraphicsEngine {
@@ -22,8 +22,8 @@ public:
 	//return the sdl window
 	SDL_Window* GetWindow() const;
 
-	//add a new VAO to the VAOStack using a shape define
-	MeshPtr CreateSimpleMeshShape(GeometricShapes Shape, ShaderPtr MeshShader, TexturePtrStack MeshTextures);
+	//create a new mesh with material assigned
+	MeshPtr CreateSimpleMeshShape(GeometricShapes Shape, ShaderPtr MeshShader, MaterialPtr MeshMaterial);
 
 	//add new shader
 	//@param 1 - Vertex Shader
@@ -56,6 +56,9 @@ private:
 	MeshPtrStack MeshStack;
 
 public:
-	//default camera position
-	Vector3 EngineDefaultCam;
+	//default camera
+	CameraPtr EngineDefaultCam;
+
+	//default texture
+	TexturePtr DefaultEngineTexture;
 };

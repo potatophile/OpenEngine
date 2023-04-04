@@ -1,5 +1,5 @@
 #pragma once
-
+#include "Engine/Graphics/Vertex.h"
 #include "Engine/CoreMinimal.h"
 
 const PositionMatrix TrianglePositions{
@@ -95,7 +95,11 @@ const IndicesMatrix CubeIndicies{
 
 class VertexArrayObject {
 public:
+	//create our simple mesh VAO
 	VertexArrayObject(GeometricShapes ChosenShape);
+	//create a complex mesh VAO from the importer
+	VertexArrayObject(vector<Vertex> Vertices, vector<UNint> Indices);
+
 	~VertexArrayObject();
 
 	void Draw();
@@ -108,4 +112,8 @@ private:
 	//VAB - ID for vertices
 	//EAB - ID for indices
 	UNint ID, VAB, EAB;
+
+	//for importing complex meshes
+	vector<Vertex> Vertices;
+	vector<UNint> Indices;
 };
