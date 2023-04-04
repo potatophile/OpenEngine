@@ -135,7 +135,6 @@
   <ItemGroup>
     <ClCompile Include="Game\Source.cpp" />
     <ClCompile Include="source\Engine\Game.cpp" />
-    <ClCompile Include="source\Engine\Graphics\Camera.cpp" />
     <ClCompile Include="source\Engine\Graphics\GraphicsEngine.cpp" />
     <ClCompile Include="source\Engine\Graphics\Mesh.cpp" />
     <ClCompile Include="source\Engine\Graphics\ShaderProgram.cpp" />
@@ -147,7 +146,6 @@
   <ItemGroup>
     <ClInclude Include="includes\Engine\CoreMinimal.h" />
     <ClInclude Include="includes\Engine\Game.h" />
-    <ClInclude Include="includes\Engine\Graphics\Camera.h" />
     <ClInclude Include="includes\Engine\Graphics\GraphicsEngine.h" />
     <ClInclude Include="includes\Engine\Graphics\Mesh.h" />
     <ClInclude Include="includes\Engine\Graphics\ShaderProgram.h" />

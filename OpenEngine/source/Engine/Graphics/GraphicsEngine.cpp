@@ -5,7 +5,6 @@
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
 #include "Engine/Graphics/Texture.h"
-#include "Engine/Graphics/Camera.h"
 
 GraphicsEngine::GraphicsEngine()
 {
@@ -13,7 +12,7 @@ GraphicsEngine::GraphicsEngine()
 	SdlGLContext = NULL;
 	bWireframeMode = false;
 	//initialize camera -2.0 back on z axis
-	EngineDefaultCam = make_shared<Camera>();
+	EngineDefaultCam = Vector3(0.0f, 0.0f, -2.0f);
 }
 
 GraphicsEngine::~GraphicsEngine()
@@ -200,9 +199,9 @@ TexturePtr GraphicsEngine::CreateTexture(const char* FilePath)
 void GraphicsEngine::ApplyScreenTransformations(ShaderPtr Shader)
 {
 	//the angle of the camera planes  - zoom
-	float FOV = EngineDefaultCam->GetCameraData().FOV;
+	float FOV = 70.0f;
 	//position of the camera/view space
-	Vector3 ViewPosition = EngineDefaultCam->GetTransforms().Location;
+	Vector3 ViewPosition = EngineDefaultCam;
 	//find the size of the screen and calculate the aspect ratio
 	int WWidth, WHeight = 0;
 	//use SDL to get the size of the window
@@ -215,11 +214,10 @@ void GraphicsEngine::ApplyScreenTransformations(ShaderPtr Shader)
 	glm::mat4 projection = glm::mat4(1.0f);
 
 	//update the coordinates for 3D
-	view = EngineDefaultCam->GetViewMatrix();
+	view = glm::translate(view, ViewPosition);
 	//create the perspective view to allow us to see in 3D
 	//also adjusting the near and far clip
-	projection = glm::perspective(glm::radians(FOV), AR,
-		EngineDefaultCam->GetCameraData().NearClip, EngineDefaultCam->GetCameraData().FarClip);
+	projection = glm::perspective(glm::radians(FOV), AR, 0.01f, 1000.0f);
 
 	Shader->SetMat4("view", view);
 	Shader->SetMat4("projection", projection);

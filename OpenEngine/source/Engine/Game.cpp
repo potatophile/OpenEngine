@@ -2,7 +2,6 @@
 #include "Engine/Graphics/Mesh.h"
 #include "Engine/Graphics/GraphicsEngine.h"
 #include "Engine/Input.h"
-#include "Engine/Graphics/Camera.h"
 
 Game& Game::GetGameInstance()
 {
@@ -67,15 +66,18 @@ void Game::Run()
         Poly = Graphics->CreateSimpleMeshShape(GeometricShapes::Cube, TextureShader, { TGreenMosaic });
         Poly2 = Graphics->CreateSimpleMeshShape(GeometricShapes::Cube, TextureShader, { TBlueTiles });
         
+        MeshPtr test = Graphics->CreateSimpleMeshShape(GeometricShapes::Polygon, TextureShader, { TBlueTiles });
         
-        //test->Transform.Rotation.y = 60.0f;
+        test->Transform.Rotation.y = 60.0f;
 
         //initial transformations for the meshes
-        Poly->Transform.Location = Vector3(0.0f, 0.0f, 0.0f);
-        Poly2->Transform.Location = Vector3(0.0f, 0.0f, 0.0f);
+        Poly->Transform.Location.x = 1.0f;
 
+        Poly2->Transform.Location.x = -1.0f;
         //Tri->Transform.Location.x = -0.5f;
+
         //Poly->Transform.Rotation.z = 45.0f;
+
         //Poly->Transform.Scale = Vector3(0.5f);
     }
 
@@ -126,41 +128,36 @@ void Game::Update()
     Vector3 CameraInput = Vector3(0.0f);
     Vector3 CameraRotate = Vector3(0.0f);
 
-    CDirections CamDirection = Graphics->EngineDefaultCam->GetDirections();
-    
     //move camera foward
     if (GameInput->IsKeyDown(SDL_SCANCODE_W)) {
-        CameraInput += CamDirection.Forward;
+        CameraInput.z = 1.0f;
     }
     //move camera backward
     if (GameInput->IsKeyDown(SDL_SCANCODE_S)) {
-        CameraInput += -CamDirection.Forward;
+        CameraInput.z = -1.0f;
     }
     //move camera left
     if (GameInput->IsKeyDown(SDL_SCANCODE_A)) {
-        CameraInput += -CamDirection.Right;
+        CameraInput.x = 1.0f;
     }
     //move camera right
     if (GameInput->IsKeyDown(SDL_SCANCODE_D)) {
-        CameraInput += CamDirection.Right;
+        CameraInput.x = -1.0f;
     }
     //move camera up
     if (GameInput->IsKeyDown(SDL_SCANCODE_Q)) {
-        CameraInput += -CamDirection.Up;
-    }//move camera down
-    if (GameInput->IsKeyDown(SDL_SCANCODE_E)) {
-        CameraInput += CamDirection.Up;
+        CameraInput.y = -1.0f;
     }
-   
-    CameraInput *= 3.0f * GetFDeltaTime();
+    //rotate camera left
+    //if (GameInput->IsKeyDown(SDL_SCANCODE_LEFT)) {
+    //    CameraInput.y = 1.0f;
+    //}
+    ////rotate camera right
+    //if (GameInput->IsKeyDown(SDL_SCANCODE_RIGHT))
 
-    Vector3 NewLocation = Graphics->EngineDefaultCam->GetTransforms().Location += CameraInput;
-    Graphics->EngineDefaultCam->Translate(NewLocation);
+    CameraInput *= 1.0f * GetFDeltaTime();
 
-    if (GameInput->IsMouseButtonDown(MouseButtons::RIGHT)) {
-        Graphics->EngineDefaultCam->RotatePitch(-GameInput->MouseYDelta * GetFDeltaTime() * 25.0f);
-        Graphics->EngineDefaultCam->RotateYaw(GameInput->MouseXDelta * GetFDeltaTime() * 25.0f);
-    }
+    Graphics->EngineDefaultCam += CameraInput;
 }
 
 void Game::Draw()
