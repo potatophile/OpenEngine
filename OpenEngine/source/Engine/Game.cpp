@@ -79,20 +79,20 @@ void Game::Run()
         MaterialPtr MBlueTiles = make_shared<Material>();
 
         //assign the base colour of the materials using the textures
-        MGreenMosaic->BaseColour = TGreenMosaic;
-        MBlueTiles->BaseColour = TBlueTiles;
+        MGreenMosaic->BaseColour.TextureV3 = TGreenMosaic;
+        MBlueTiles->BaseColour.TextureV3 = TBlueTiles;
 
         //create models
-        Poly = Graphics->CreateSimpleModelShape(GeometricShapes::Cube, TextureShader);
-        Poly2 = Graphics->CreateSimpleModelShape(GeometricShapes::Cube, TextureShader);
+        Poly = Graphics->ImportModel("Game/Models/Primitives/Cube.fbx", TextureShader);
+        Poly2 = Graphics->ImportModel("Game/Models/Primitives/Sphere.fbx", TextureShader);
         
         //set the materials of the models
         Poly->SetMaterialBySlot(0, MBlueTiles);
         Poly2->SetMaterialBySlot(0, MGreenMosaic);
         
         //initial transformations for the meshes
-        Poly->Transform.Location = Vector3(0.0f, 0.0f, 0.0f);
-        Poly2->Transform.Location = Vector3(0.0f, 0.0f, 0.0f);
+        Poly->Transform.Location = Vector3(0.0f, 0.0f, -1.0f);
+        Poly2->Transform.Location = Vector3(0.0f, 0.0f, 1.0f);
 
         //import custom meshes
         Wall = Graphics->ImportModel("Game/Models/damaged-wall/source/SM_Wall_Damaged.obj", TextureShader);
@@ -110,7 +110,7 @@ void Game::Run()
 
             //create a material
             MaterialPtr MWall = make_shared<Material>();
-            MWall->BaseColour = TWall;
+            MWall->BaseColour.TextureV3 = TWall;
 
             //apply the material
             Wall->SetMaterialBySlot(1, MWall);
