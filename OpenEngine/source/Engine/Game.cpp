@@ -82,7 +82,7 @@ void Game::Run()
         MGreenMosaic->BaseColour.TextureV3 = TGreenMosaic;
         MBlueTiles->BaseColour.TextureV3 = TBlueTiles;
 
-        //create models
+        /*//create models
         Poly = Graphics->ImportModel("Game/Models/Primitives/Cube.fbx", TextureShader);
         Poly2 = Graphics->ImportModel("Game/Models/Primitives/Sphere.fbx", TextureShader);
         
@@ -92,10 +92,12 @@ void Game::Run()
         
         //initial transformations for the meshes
         Poly->Transform.Location = Vector3(0.0f, 0.0f, -1.0f);
-        Poly2->Transform.Location = Vector3(0.0f, 0.0f, 1.0f);
+        Poly2->Transform.Location = Vector3(0.0f, 0.0f, 1.0f);*/
 
         //import custom meshes
         Wall = Graphics->ImportModel("Game/Models/damaged-wall/source/SM_Wall_Damaged.obj", TextureShader);
+        Gundam = Graphics->ImportModel("Game/Models/Gundam/source/model.fbx", TextureShader);
+        Knife = Graphics->ImportModel("Game/Models/throwing-knife-black/source/knife.fbx", TextureShader);
 
         if (Wall != nullptr) {
             Wall->Transform.Scale = Vector3(0.05f);
@@ -114,6 +116,46 @@ void Game::Run()
 
             //apply the material
             Wall->SetMaterialBySlot(1, MWall);
+        }
+        if (Gundam != nullptr) {
+            Gundam->Transform.Rotation.x = -90.0f;
+            Gundam->Transform.Rotation.z = -90.0f;
+            Gundam->Transform.Location = Vector3(0.0f, 0.5f, 0.0f);
+
+            //transform the wall
+
+
+            //create the texture
+            TexturePtr TGundam = Graphics->CreateTexture("Game/Models/Gundam/textures/EXA-ON.png");
+            TexturePtr EGundam = Graphics->CreateTexture("Game/Models/Gundam/textures/EXA-ON-E.png");
+            TexturePtr SGundam = Graphics->CreateTexture("Game/Models/Gundam/textures/EXA-ON-AO.png");
+
+            //create a material
+            MaterialPtr MGundam = make_shared<Material>();
+            MGundam->BaseColour.TextureV3 = TGundam;
+            MGundam->EmissiveColour.TextureV3 = EGundam;
+            MGundam->SpecularColour.TextureV3 = SGundam;
+
+            //apply the material
+            Gundam->SetMaterialBySlot(0, MGundam);
+            Gundam->GetMaterialBySlot(0)->SpecularColour.MultiplierV3 = Vector3(1.0f);
+            Gundam->GetMaterialBySlot(0)->EmissiveColour.MultiplierV3 = Vector3(1.0f);
+        }
+        if (Knife != nullptr) {
+            //transform the wall
+            Knife->Transform.Scale = Vector3(0.05f);
+            Knife->Transform.Rotation.y = 90.0f;
+            Knife->Transform.Location = Vector3(1.0f, 0.0f, 0.0f);
+
+            //create the texture
+            TexturePtr TKnife = Graphics->CreateTexture("Game/Models/throwing-knife-black/textures/knife_diffuseOriginal.png");
+
+            //create a material
+            MaterialPtr MKnife = make_shared<Material>();
+            MKnife->BaseColour.TextureV3 = TKnife;
+
+            //apply the material
+            Knife->SetMaterialBySlot(0, MKnife);
         }
     }
 
@@ -151,15 +193,30 @@ void Game::Update()
     //update the last frame tiem for the next update
     LastFrameTime = CurrentFrameTime;
 
-
     //TODO:Handle Logic 
-    Poly->Transform.Rotation.z += 50.0f * GetFDeltaTime();
-    Poly->Transform.Rotation.x += 50.0f * GetFDeltaTime();
-    Poly->Transform.Rotation.y += 50.0f * GetFDeltaTime();
+    static int AnimVal = 1.0f;
+    static int Rotate = 0.0f;
     
-    Poly2->Transform.Rotation.z -= 50.0f * GetFDeltaTime();
-    Poly2->Transform.Rotation.x -= 50.0f * GetFDeltaTime();
-    Poly2->Transform.Rotation.y -= 50.0f * GetFDeltaTime();
+    if (Knife->Transform.Location.z > 4.5f)
+        AnimVal = -1.0f;
+
+    if (Knife->Transform.Location.z < -4.5f)
+        AnimVal = 1.0f;
+
+    if (Gundam->Transform.Location.x == 1.0f)
+        Rotate = 180.0f;
+    else
+        Rotate = -270.0f;
+
+    Wall->Transform.Scale += (0.01f * AnimVal) * GetFDeltaTime();
+
+    Gundam->Transform.Location.x += (0.5f * AnimVal) * GetFDeltaTime();
+
+    Gundam->Transform.Rotation.z = (Rotate * AnimVal);
+
+    Knife->Transform.Rotation.z += 500.0f * AnimVal * GetFDeltaTime();
+    
+    Knife->Transform.Location.z += (2.0f * AnimVal) * GetFDeltaTime();
     
     Vector3 CameraInput = Vector3(0.0f);
     Vector3 CameraRotate = Vector3(0.0f);

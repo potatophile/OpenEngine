@@ -70,4 +70,7 @@ private:
 	ModelPtr Poly;
 	
 	ModelPtr Wall;
+	ModelPtr Gundam;
+	ModelPtr Knife;
+
 };
