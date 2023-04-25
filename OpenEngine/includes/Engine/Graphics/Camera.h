@@ -1,5 +1,6 @@
 #pragma once
 #include "Engine/Math/Transformations.h"
+#include "Engine/CoreMinimal.h"
 
 struct STCameraData {
 	//how fast the camera can move
@@ -15,7 +16,7 @@ struct STCameraData {
 	float FarClip = 1000.0f;
 
 	//speed at which the camera is turn is multiplied
-	float LookSensitivity = 20.0f;
+	float LookSensitivity = 0.2f;
 };
 
 class Camera {
@@ -45,6 +46,11 @@ public:
 	//rotate the camera based on pitch
 	void RotateYaw(float Amount);
 
+	//update camera logic
+	void Update();
+
+	//get the collision for the camera
+	CollisionPtr GetCameraCollision() const { return CameraCollision; }
 private:
 	//Find the current direction vectors based on the rotation of YAW and PITCH of the camera
 	void UpdateDirectionVectors();
@@ -59,4 +65,7 @@ private:
 
 	//hold the extra camera info
 	STCameraData CameraData;
+
+	//add a camera collision
+	CollisionPtr CameraCollision;
 };

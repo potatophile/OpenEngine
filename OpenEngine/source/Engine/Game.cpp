@@ -29,6 +29,15 @@ MaterialPtr Game::GetDefaultEngineMaterial()
     return Graphics->DefaultEngineMaterial;
 }
 
+void Game::RemoveModelFromGame(ModelPtr& ModelToRemove)
+{
+    //remove from the graphics engine
+    Graphics->RemoveModel(ModelToRemove);
+
+    //change the reference to nullptr and rmeove from the game
+    ModelToRemove = nullptr;
+}
+
 Game::Game()
 {
     cout << "Game Initialized" << endl;
@@ -98,18 +107,11 @@ void Game::Run()
         //import custom meshes
         Wall = Graphics->ImportModel("Game/Models/damaged-wall/source/SM_Wall_Damaged.obj", TextureShader);
 
-        //adding boxcollision
-        Wall->AddCollisionToModel(Vector3(1.3f, 4.0f, 10.0f), Vector3(0.0f, 2.0f, 0.0f));
-        Poly->AddCollisionToModel(Vector3(1.0f));
-        Poly2->AddCollisionToModel(Vector3(2.0f));
-
         if (Wall != nullptr) {
+            //transform the wall
             Wall->Transform.Scale = Vector3(0.05f);
             Wall->Transform.Rotation.y = 90.0f;
-            Wall->Transform.Location = Vector3(2.0f, -2.0f, 0.0f);
-
-            //transform the wall
-
+            Wall->Transform.Location = Vector3(12.0f, -2.0f, 0.0f);
 
             //create the texture
             TexturePtr TWall = Graphics->CreateTexture("Game/Models/damaged-wall/textures/Wall_Damaged_BC.png");
@@ -121,6 +123,11 @@ void Game::Run()
             //apply the material
             Wall->SetMaterialBySlot(1, MWall);
         }
+
+        //adding boxcollision
+        Wall->AddCollisionToModel(Vector3(10.0f, 4.0f, 10.0f), Vector3(0.0f, 2.0f, 0.0f));
+        Poly->AddCollisionToModel(Vector3(1.0f));
+        Poly2->AddCollisionToModel(Vector3(2.0f));
     }
 
     //as long as the game is not over
@@ -142,38 +149,11 @@ void Game::ProcessInput()
 {
     //run the input detection for our game input
     GameInput->ProcessInput();
-}
 
-void Game::Update()
-{
-    //Set delta time first always
-    static double LastFrameTime = 0.0;
-    //Set the current time since the game has passed
-    double CurrentFrameTime = static_cast<double>(SDL_GetTicks64());
-    //find the time difference between last and current frame
-    double NewDeltaTime = CurrentFrameTime - LastFrameTime;
-    //set delta time as seconds
-    DeltaTime = NewDeltaTime / 1000.0;
-    //update the last frame tiem for the next update
-    LastFrameTime = CurrentFrameTime;
-
-
-    //TODO:Handle Logic 
-    Wall->Transform.Location.x += -0.1f * GetFDeltaTime();
-
-    Poly->Transform.Rotation.z += 50.0f * GetFDeltaTime();
-    Poly->Transform.Rotation.x += 50.0f * GetFDeltaTime();
-    Poly->Transform.Rotation.y += 50.0f * GetFDeltaTime();
-    
-    Poly2->Transform.Rotation.z -= 50.0f * GetFDeltaTime();
-    Poly2->Transform.Rotation.x -= 50.0f * GetFDeltaTime();
-    Poly2->Transform.Rotation.y -= 50.0f * GetFDeltaTime();
-    
     Vector3 CameraInput = Vector3(0.0f);
-    Vector3 CameraRotate = Vector3(0.0f);
 
     CDirections CamDirection = Graphics->EngineDefaultCam->GetDirections();
-    
+
     Graphics->EngineDefaultCam->GetCameraData().FarClip;
 
     //move camera foward
@@ -204,8 +184,8 @@ void Game::Update()
     Graphics->EngineDefaultCam->AddMovementInput(CameraInput);
 
     if (GameInput->IsMouseButtonDown(MouseButtons::RIGHT)) {
-        Graphics->EngineDefaultCam->RotatePitch(-GameInput->MouseYDelta * GetFDeltaTime());
-        Graphics->EngineDefaultCam->RotateYaw(GameInput->MouseXDelta * GetFDeltaTime());
+        Graphics->EngineDefaultCam->RotatePitch(-GameInput->MouseYDelta);
+        Graphics->EngineDefaultCam->RotateYaw(GameInput->MouseXDelta);
         GameInput->ShowCursor(false);
     }
     else {
@@ -213,20 +193,73 @@ void Game::Update()
     }
 }
 
+void Game::Update()
+{
+    //Set delta time first always
+    static double LastFrameTime = 0.0;
+    //Set the current time since the game has passed
+    double CurrentFrameTime = static_cast<double>(SDL_GetTicks64());
+    //find the time difference between last and current frame
+    double NewDeltaTime = CurrentFrameTime - LastFrameTime;
+    //set delta time as seconds
+    DeltaTime = NewDeltaTime / 1000.0;
+    //update the last frame tiem for the next update
+    LastFrameTime = CurrentFrameTime;
+
+
+    //TODO:Handle Logic 
+    //Wall->Transform.Location.x += -0.1f * GetFDeltaTime();
+
+    if (Poly != nullptr) {
+        Poly->Transform.Rotation.z += 50.0f * GetFDeltaTime();
+        Poly->Transform.Rotation.x += 50.0f * GetFDeltaTime();
+        Poly->Transform.Rotation.y += 50.0f * GetFDeltaTime();    
+    }
+    
+    if (Poly2 != nullptr) {
+        Poly2->Transform.Rotation.z -= 50.0f * GetFDeltaTime();
+        Poly2->Transform.Rotation.x -= 50.0f * GetFDeltaTime();
+        Poly2->Transform.Rotation.y -= 50.0f * GetFDeltaTime();
+    }
+
+    if(Wall!=nullptr)
+        Wall->Transform.Rotation.y += 50.0f * GetFDeltaTime();
+
+    Graphics->EngineDefaultCam->Update();
+
+    //collision stuff
+    CollisionPtr CamCol = Graphics->EngineDefaultCam->GetCameraCollision();
+
+    if (Wall != nullptr && CamCol->IsOverlapping(*Wall->GetCollision())) {
+        //draw green collider if colliding with wall
+        
+        RemoveModelFromGame(Wall);
+    }
+}
+
 void Game::Draw()
 {
     Graphics->ClearGraphics();
 
+    //draw graphics to screen
     Graphics->Draw();
 
-    if (Wall->GetCollision()->IsOverlapping(*Poly->GetCollision())) {
-        //draw green collider if colliding with poly
-        Wall->GetCollision()->DebugDraw(Vector3(0.0f, 255.0f, 0.0f));
-    }
-    else {
-        //draw red collider if not colliding
-        Wall->GetCollision()->DebugDraw(Vector3(255.0f, 0.0f, 0.0f));
-    }
+    //debug draw the camera collision
+    CollisionPtr CamCol = Graphics->EngineDefaultCam->GetCameraCollision();
+
+    //if (Wall != nullptr && CamCol->IsOverlapping(*Wall->GetCollision())) {
+    //    //draw green collider if colliding with wall
+    //    CamCol->DebugDraw(Vector3(0.0f, 255.0f, 0.0f));
+    //}
+    //else {
+    //    //draw red collider if not colliding
+    //    CamCol->DebugDraw(Vector3(255.0f, 0.0f, 0.0f));
+    //}
+
+    //if (Wall != nullptr) {
+    //    Wall->GetCollision()->DebugDraw(Vector3(255.0f));
+    //}
+
     Poly->GetCollision()->DebugDraw(Vector3(255.0f, 0.0f, 0.0f));
 
     Graphics->PresentGraphics();
