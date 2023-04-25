@@ -134,6 +134,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Game\Source.cpp" />
+    <ClCompile Include="source\Engine\Collision\Collision.cpp" />
     <ClCompile Include="source\Engine\Game.cpp" />
     <ClCompile Include="source\Engine\Graphics\Camera.cpp" />
     <ClCompile Include="source\Engine\Graphics\GraphicsEngine.cpp" />
@@ -147,6 +148,7 @@
     <ClCompile Include="source\stb_image\stb_image.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="includes\Engine\Collision\Collision.h" />
     <ClInclude Include="includes\Engine\CoreMinimal.h" />
     <ClInclude Include="includes\Engine\Game.h" />
     <ClInclude Include="includes\Engine\Graphics\Camera.h" />
@@ -166,6 +168,8 @@
     <None Include="Game\Shader\TextureShader\TextureShader.svert" />
     <None Include="Game\Shader\VertexShader\VertexShader.sfrag" />
     <None Include="Game\Shader\VertexShader\VertexShader.svert" />
+    <None Include="Game\Shader\WireframeShader\WireframeShader.sfrag" />
+    <None Include="Game\Shader\WireframeShader\WireframeShader.svert" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

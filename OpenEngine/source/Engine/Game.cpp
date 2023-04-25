@@ -4,6 +4,7 @@
 #include "Engine/Input.h"
 #include "Engine/Graphics/Camera.h"
 #include "Engine/Graphics/Material.h"
+#include "Engine/Collision/Collision.h"
 
 Game& Game::GetGameInstance()
 {
@@ -91,11 +92,16 @@ void Game::Run()
         Poly2->SetMaterialBySlot(0, MGreenMosaic);
         
         //initial transformations for the meshes
-        Poly->Transform.Location = Vector3(0.0f, 0.0f, -1.0f);
+        Poly->Transform.Location = Vector3(-2.0f, 0.0f, -1.0f);
         Poly2->Transform.Location = Vector3(0.0f, 0.0f, 1.0f);
 
         //import custom meshes
         Wall = Graphics->ImportModel("Game/Models/damaged-wall/source/SM_Wall_Damaged.obj", TextureShader);
+
+        //adding boxcollision
+        Wall->AddCollisionToModel(Vector3(1.3f, 4.0f, 10.0f), Vector3(0.0f, 2.0f, 0.0f));
+        Poly->AddCollisionToModel(Vector3(1.0f));
+        Poly2->AddCollisionToModel(Vector3(2.0f));
 
         if (Wall != nullptr) {
             Wall->Transform.Scale = Vector3(0.05f);
@@ -153,6 +159,8 @@ void Game::Update()
 
 
     //TODO:Handle Logic 
+    Wall->Transform.Location.x += -0.1f * GetFDeltaTime();
+
     Poly->Transform.Rotation.z += 50.0f * GetFDeltaTime();
     Poly->Transform.Rotation.x += 50.0f * GetFDeltaTime();
     Poly->Transform.Rotation.y += 50.0f * GetFDeltaTime();
@@ -207,7 +215,21 @@ void Game::Update()
 
 void Game::Draw()
 {
+    Graphics->ClearGraphics();
+
     Graphics->Draw();
+
+    if (Wall->GetCollision()->IsOverlapping(*Poly->GetCollision())) {
+        //draw green collider if colliding with poly
+        Wall->GetCollision()->DebugDraw(Vector3(0.0f, 255.0f, 0.0f));
+    }
+    else {
+        //draw red collider if not colliding
+        Wall->GetCollision()->DebugDraw(Vector3(255.0f, 0.0f, 0.0f));
+    }
+    Poly->GetCollision()->DebugDraw(Vector3(255.0f, 0.0f, 0.0f));
+
+    Graphics->PresentGraphics();
 }
 
 void Game::CloseGame()

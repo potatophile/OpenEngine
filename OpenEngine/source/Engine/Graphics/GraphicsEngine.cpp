@@ -7,6 +7,7 @@
 #include "Engine/Graphics/Texture.h"
 #include "Engine/Graphics/Camera.h"
 #include "Engine/Graphics/Material.h"
+#include "Engine/Collision/Collision.h"
 
 GraphicsEngine::GraphicsEngine()
 {
@@ -125,16 +126,12 @@ void GraphicsEngine::ClearGraphics()
 
 void GraphicsEngine::Draw()
 {
-	ClearGraphics();
-
 	HandleWireframeMode(false);
 
 	//run through each model and call its draw method
 	for (ModelPtr LModel : ModelStack) {
 		LModel->Draw();
 	}
-
-	PresentGraphics();
 }
 
 SDL_Window* GraphicsEngine::GetWindow() const

@@ -48,6 +48,12 @@
     <ClCompile Include="source\Engine\Graphics\Material.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="source\Engine\Graphics\Model.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Engine\Collision\Collision.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="includes\Engine\Graphics\VertexArrayObject.h">
@@ -86,11 +92,19 @@
     <ClInclude Include="includes\Engine\Graphics\Vertex.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="includes\Engine\Graphics\Model.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\Engine\Collision\Collision.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Game\Shader\VertexShader\VertexShader.svert" />
     <None Include="Game\Shader\VertexShader\VertexShader.sfrag" />
     <None Include="Game\Shader\TextureShader\TextureShader.sfrag" />
     <None Include="Game\Shader\TextureShader\TextureShader.svert" />
+    <None Include="Game\Shader\WireframeShader\WireframeShader.sfrag" />
+    <None Include="Game\Shader\WireframeShader\WireframeShader.svert" />
   </ItemGroup>
 </Project>
