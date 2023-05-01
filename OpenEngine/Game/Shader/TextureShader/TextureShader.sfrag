@@ -50,8 +50,8 @@ struct PointLight {
 
 // arrays of lights in the scene
 // is passed into the shader
-DirLight[2] DirLights;
-PointLight[20] PointLights;
+DirLight DirLights;
+PointLight[2] PointLights;
 
 // calculate the specular and light values for directional and point lighting
 vec3 CalculateDirLight(ShaderMaterial SMat, vec3 ViewDir, DirLight Light);
@@ -69,16 +69,21 @@ void main() {
 	//gives us a direction between the vertex and the camera
 	vec3 ViewDir = normalize(CamPosition - VPosition);
 
-	DirLights[0].Colour = vec3(1.0f);
-	DirLights[0].Direction = vec3(0.0f, -1.0f, 0.0f);
-	DirLights[0].AmbientLight = vec3(1.0f);
+	DirLights.Colour = vec3(1.0f);
+	DirLights.Direction = vec3(-0.5f, -1.0f, -0.2f);
+	DirLights.AmbientLight = vec3(1.0f);
 
 	// create a custom point light
-	PointLights[0].Colour = vec3(1.0f);
-	PointLights[0].Position = vec3(-2.0f, -2.0f, 0.0f);
-	PointLights[0].Attenuation = 10.0f;
+	PointLights[0].Colour = vec3(1.0f, 0.0f, 0.0f);
+	PointLights[0].Position = vec3(5.0f, -2.0f, -5.0f);
+	PointLights[0].Attenuation = 50.0f;
 
-	vec3 result = CalculatePointLight(SMat, ViewDir, PointLights[0]);
+	// create a custom point light 2
+	PointLights[1].Colour = vec3(0.0f, 0.0f, 1.0f);
+	PointLights[1].Position = vec3(5.0f, 1.0f, 10.0f);
+	PointLights[1].Attenuation = 40.0f;
+
+	vec3 result = CalculateDirLight(SMat, ViewDir, DirLights) + CalculatePointLight(SMat, ViewDir, PointLights[0])  + CalculatePointLight(SMat, ViewDir, PointLights[1]);
 
 	// texture() accepts colour and coordinates to create an openGL texture
 	OutColour = vec4(result, 1.0f);
